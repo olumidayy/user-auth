@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'auth.dart';
 //import 'home.dart';
 
 class SignIn extends StatefulWidget {
@@ -11,21 +11,8 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   String email, password;
-  bool valid = true;
 
-  void validateUser()async{
-    try{
-      AuthResult user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-      print('logged in as ${user.user.uid}');
-      setState(() {
-        valid = true;
-      });
-    } catch (e){
-      setState(() {
-        valid = false;
-      });
-    }
-  }
+  AuthProvider auth = AuthProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -78,17 +65,15 @@ class _SignInState extends State<SignIn> {
                   obscureText: true,
                 ),
               ),
-              valid ? SizedBox() : Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('user does not exist', style: TextStyle(color: Colors.red),),
-              ),
+//              valid ? SizedBox() : Padding(
+//                padding: const EdgeInsets.all(8.0),
+//                child: Text('user does not exist', style: TextStyle(color: Colors.red),),
+//              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(28.0, 8, 28, 8),
                 child: RaisedButton(
                   color: Colors.white,
                   onPressed: (){
-                    validateUser();
-                    print(valid);
                   },
                   child: Text(
                     'Sign In',
@@ -105,7 +90,10 @@ class _SignInState extends State<SignIn> {
                 padding: const EdgeInsets.fromLTRB(28.0, 8, 28, 8),
                 child: RaisedButton(
                   color: Colors.white,
-                  onPressed: (){},
+                  onPressed: ()async{
+                    bool stat = await auth.loginWithGoogle();
+                    print(stat);
+                  },
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'home.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -9,6 +11,22 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   String email, password;
+  bool valid = true;
+
+  void validateUser()async{
+    try{
+      AuthResult user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      print('logged in as ${user.user.uid}');
+      setState(() {
+        valid = true;
+      });
+    } catch (e){
+      setState(() {
+        valid = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +35,7 @@ class _SignInState extends State<SignIn> {
           child: ListView(
             children: <Widget>[
 //              Logo(),
-              SizedBox(height: 10,),
+              SizedBox(height: 50,),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 28.0),
                 child: Text(
@@ -60,11 +78,18 @@ class _SignInState extends State<SignIn> {
                   obscureText: true,
                 ),
               ),
+              valid ? SizedBox() : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('user does not exist', style: TextStyle(color: Colors.red),),
+              ),
               Padding(
-                padding: const EdgeInsets.all(28.0),
+                padding: const EdgeInsets.fromLTRB(28.0, 8, 28, 8),
                 child: RaisedButton(
                   color: Colors.white,
-                  onPressed: (){},
+                  onPressed: (){
+                    validateUser();
+                    print(valid);
+                  },
                   child: Text(
                     'Sign In',
                     style: GoogleFonts.raleway(
@@ -74,6 +99,21 @@ class _SignInState extends State<SignIn> {
                           fontSize: 17.5),
                     ),
                   ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(28.0, 8, 28, 8),
+                child: RaisedButton(
+                  color: Colors.white,
+                  onPressed: (){},
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Sign In with Google", style: TextStyle(color: Colors.deepPurple[900], fontWeight: FontWeight.normal)),
+                        SizedBox(width: 10),
+                        FaIcon(FontAwesomeIcons.google)
+                       ]
+                  )
                 ),
               ),
               Row(

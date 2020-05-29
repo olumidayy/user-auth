@@ -1,4 +1,4 @@
-package com.telapi.user_auth
+package com.example.userauth
 
 import io.flutter.embedding.android.FlutterActivity
 

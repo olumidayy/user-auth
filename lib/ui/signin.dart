@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'auth.dart';
-//import 'home.dart';
+import 'home.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -73,7 +73,10 @@ class _SignInState extends State<SignIn> {
                 padding: const EdgeInsets.fromLTRB(28.0, 8, 28, 8),
                 child: RaisedButton(
                   color: Colors.white,
-                  onPressed: (){
+                  onPressed: ()async{
+                    var user = await auth.signInWithEmail(email, password);
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => Home(user)));
                   },
                   child: Text(
                     'Sign In',
@@ -91,8 +94,11 @@ class _SignInState extends State<SignIn> {
                 child: RaisedButton(
                   color: Colors.white,
                   onPressed: ()async{
-                    bool stat = await auth.loginWithGoogle();
-                    print(stat);
+                    var user = await auth.loginWithGoogle();
+                    if(user != null){
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => Home(user)));
+                    }
                   },
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

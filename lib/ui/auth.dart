@@ -9,7 +9,7 @@ class AuthProvider {
 
 
 
-  Future<bool> signInWithEmail(String email, String password) async{
+  Future<dynamic> signInWithEmail(String email, String password) async{
 
     try {
 
@@ -17,19 +17,13 @@ class AuthProvider {
 
       FirebaseUser user = result.user;
 
-      if(user != null)
-
-        return true;
-
-      else
-
-        return false;
+      return user;
 
     } catch (e) {
 
       print(e.message);
 
-      return false;
+      return null;
 
     }
 
@@ -53,7 +47,7 @@ class AuthProvider {
 
 
 
-  Future<bool> loginWithGoogle() async {
+  Future<dynamic> loginWithGoogle() async {
 
     try {
 
@@ -73,19 +67,15 @@ class AuthProvider {
 
       ));
 
-      if(res.user == null)
-
-        return false;
-
-      return true;
+      return res.user;
 
     } catch (e) {
 
       print(e.message);
 
-      print("Error logging with google");
+      print("Error logging in with google");
 
-      return false;
+      return null;
 
     }
 

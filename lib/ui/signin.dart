@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'auth.dart';
 import 'home.dart';
+import '../service.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -12,7 +13,9 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   String email, password;
 
-  AuthProvider auth = AuthProvider();
+  AuthProvider auth = new AuthProvider();
+
+  OwnerServices o = new OwnerServices();
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +76,13 @@ class _SignInState extends State<SignIn> {
                 padding: const EdgeInsets.fromLTRB(28.0, 8, 28, 8),
                 child: RaisedButton(
                   color: Colors.white,
-                  onPressed: ()async{
-                    var user = await auth.signInWithEmail(email, password);
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => Home(user)));
+                  onPressed: () async{
+                    await o.getPhoneContacts()
+                    .then((c) => print(c));
+//                    print(c);
+//                    var user = await auth.signInWithEmail(email, password);
+//                    Navigator.pushReplacement(context,
+//                        MaterialPageRoute(builder: (context) => Home(user)));
                   },
                   child: Text(
                     'Sign In',
